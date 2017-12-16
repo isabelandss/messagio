@@ -1,0 +1,15 @@
+{
+  "name": "messagio",
+  "version": "1.0.0",
+  "description": "A simple chat project, that shakes your hand",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "message"
+  ],
+  "author": "Isabela Neri dos Santos; Matheus Scarparo Galdino",
+  "license": "ISC"
+}
