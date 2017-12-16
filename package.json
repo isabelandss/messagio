@@ -4,6 +4,7 @@
   "description": "A simple chat project, that shakes your hand",
   "main": "app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
