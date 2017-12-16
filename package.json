@@ -4,6 +4,7 @@
   "description": "A simple chat project, that shakes your hand",
   "main": "app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -11,5 +12,13 @@
     "message"
   ],
   "author": "Isabela Neri dos Santos; Matheus Scarparo Galdino",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.13.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.13.3"
+  }
 }
