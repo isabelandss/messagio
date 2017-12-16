@@ -2,8 +2,11 @@ const userController = require('../controllers/user.controller');
 
 module.exports = (app) => {
     app
-        .get('/users', userController.getUsers)
-        .get('/user/:id', userController.getUser)
+        .route('/user')
+        .get(userController.getUsers)
+        .post(userController.saveUser);
 
-        .post('/user', userController.saveUser)
+    app
+        .route('/user/:id')
+        .get(userController.getUser)
 }
