@@ -15,6 +15,9 @@ const User = new Schema({
     password: {
         type: String,
         required: ["A senha é obrigatória."]
+    },
+    token: {
+        type: String
     }
 })
 
