@@ -19,6 +19,6 @@ const User = new Schema({
     token: {
         type: String
     }
-})
+});
 
 module.exports = mongoose.model('User', User)

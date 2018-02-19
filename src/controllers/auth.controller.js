@@ -1,61 +1,40 @@
-const   jwt     = require('jsonwebtoken'),
-        bcrypt  = require('bcryptjs'),
-        User    = require('../models/user.model'),
-        utils   = require('../utils/utils'),
-        config  = require('../../config/secret');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const User = require('../models/user.model');
+const config = require('../../config/secret');
 
-module.exports.getToken = (req, res) => {
-    var token = jwt.sign({ id: 'teste' }, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-    });
+module.exports.signin = async (req, res) => {
+	try {
+		if (!req.body.password) {
+			return res.status(401).json({ error: 'Unauthorized' });
+		}
 
-    res.send(token);
-}
+		const user = await User.findOne({
+			email: req.body.email
+		});
 
-module.exports.signin = (req, res) => {
-    let bololo = {
-        email: '',
-        _id: ''
-    }
-    let user = req.body;
+		if (!user) {
+			return res.status(204).json({ message: 'User not found' });
+		}
 
-    if(!user.password) {
-        return res.status(401).json({
-            'error': 'Usuário não autenticado'
-        }) 
-    } 
-    
-    User.findOne({
-        'email': user.email
-    }, (error, userResult) => {
-        if (error) return res.status(500).json({
-            'error': utils.getErrorMessageFromModel(error)
-        })
+		if (await !bcrypt.compare(req.body.password, user.password)) {
+			return res.status(401).json({ message: 'Unauthorized'})
+		}
 
-        if (!userResult) return res.status(401).json({
-            'error': 'Usuário não encontrado'
-        })
+		if (!jwt.verify(user.token, config.secret)) {
+			User.findOneAndUpdate({ 
+				email: user.email 
+			}, {
+				$set: {
+					token: jwt.sign({ _id: user._id }, config.secret, {
+						expiresIn: 86400
+					})
+				}
+			});
+		}
 
-        if (!bcrypt.compareSync(user.password, userResult.password)) {
-            return res.status(401).json({
-                'error': 'Usuário não autenticado'
-            })  
-        }
-
-        return res.status(200).json(userResult)
-    })
-}
-
-module.exports.verifyToken = (req, res, next) => {
-    const token = req.headers.authorization
-    if (!token) {
-      return res.status(401).json({ mensagem: 'Não autorizado' });
-    }
-    jwt.verify(token, config.secret, (err) => {
-      if (err) {
-        return res.status(403).json({ mensagem: 'Token não válido' });
-      }
-
-      next();
-    });
-  };
+		return res.status(200).json({ message: 'User logged successfully' });
+	} catch (error) {
+		return res.status(500).json({ error });
+	}
+};
