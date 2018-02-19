@@ -15,7 +15,10 @@ const User = new Schema({
     password: {
         type: String,
         required: ["A senha é obrigatória."]
+    },
+    token: {
+        type: String
     }
-})
+});
 
 module.exports = mongoose.model('User', User)
